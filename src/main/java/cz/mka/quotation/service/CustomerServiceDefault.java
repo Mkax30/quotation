@@ -2,6 +2,7 @@ package cz.mka.quotation.service;
 
 import cz.mka.quotation.model.Customer;
 import cz.mka.quotation.repository.CustomerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,11 @@ public class CustomerServiceDefault implements CustomerService {
     public Customer updateCustomer(Customer customer, Long id) {
 
         Customer c = customerRepository.getReferenceById(id);
-        c.setFirstName(customer.getFirstName());
+        try {
+            c.setFirstName(customer.getFirstName());
+        } catch (EntityNotFoundException e) {
+            return null;
+        }
         c.setLastName(customer.getLastName());
         c.setMiddleName(customer.getMiddleName());
         c.setBirthDate(customer.getBirthDate());
